@@ -6,7 +6,7 @@ from web_scrape.controller import controller
 
 
 # Setting the CRON time period
-@repeat(every(5).seconds)
+@repeat(every(15).minutes)
 def job() -> None:
     controller()
 
