@@ -7,6 +7,7 @@ from Product import Product
 from web_scrape.vizualize import show_image
 
 
+# Web scraping the given image and returning the products with maximum and minimum prices
 def web_scrape(url: str, products_class: str, product_prices_class: str, product_names_class: str, product_images_class: str, image_src: str) -> tuple:
     min_price = sys.maxsize
     max_price = -sys.maxsize
@@ -27,6 +28,7 @@ def web_scrape(url: str, products_class: str, product_prices_class: str, product
 
     counter = 0
 
+    # Collect all products from the page
     for product in products:
         product_price = product_prices[counter]
         product_name = product_names[counter].getText()
@@ -34,7 +36,6 @@ def web_scrape(url: str, products_class: str, product_prices_class: str, product
         price = float(re.findall(price_pattern, product_price.text)[0])
         price_list.append(price)
 
-        # image = product_images[counter]['data-src']
         image = product_images[counter][image_src]
 
         product_cls = Product(product_name, price, image)

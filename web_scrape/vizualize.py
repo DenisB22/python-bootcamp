@@ -2,6 +2,7 @@ from skimage import io
 import matplotlib.pyplot as plt
 
 
+# Function for visualizing the product image
 def show_image(url: str) -> None:
     plt.rcParams["figure.figsize"] = [7.50, 3.50]
     plt.rcParams["figure.autolayout"] = True
