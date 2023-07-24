@@ -10,7 +10,7 @@ import secrets
 """
 
 
-def validate_password(rand_pass):
+def validate_password(rand_pass: str) -> bool:
     allowed_symbols = ["!", "@", "#", "$", "%", "^", "&", "*", "<", ">", "?", "{", "}"]
 
     min_length = 8
@@ -45,7 +45,7 @@ def validate_password(rand_pass):
         return False
 
 
-def generate_password():
+def generate_password() -> str:
 
     at_least_allowed_symbols = 3
     at_least_numbers = 3
