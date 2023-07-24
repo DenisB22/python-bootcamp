@@ -5,7 +5,7 @@ from web_scrape.web_scraper import web_scrape
 
 
 # Communicator with CSV exporter module
-def module_communicator(product_max, product_min):
+def module_communicator(product_max: dict, product_min: dict) -> None:
     file_exists = export_only_cols_to_csv_max()
 
     if file_exists:
