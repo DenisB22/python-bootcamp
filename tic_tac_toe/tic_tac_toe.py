@@ -1,19 +1,19 @@
 import random
 
 
-def display_board(board):
+def display_board(board: list):
     print(board[0] + '|' + board[1] + '|' + board[2])
     print(board[3] + '|' + board[4] + '|' + board[5])
     print(board[6] + '|' + board[7] + '|' + board[8])
 
 
-def choose_first():
+def choose_first() -> int:
     player_goes_first = random.randint(1, 2)
 
     return player_goes_first
 
 
-def player_input():
+def player_input() -> str:
     is_correct_symbol = False
     symbol = ''
 
@@ -26,12 +26,12 @@ def player_input():
     return symbol
 
 
-def space_check(board, position):
+def space_check(board: list, position: int) -> bool:
     if board[position] != 'X' and board[position] != 'O':
         return True
 
 
-def player_choice(board):
+def player_choice(board: list) -> int:
     position = ''
 
     is_position_valid = False
@@ -59,19 +59,19 @@ def player_choice(board):
     return position
 
 
-def place_marker(board, marker, position):
+def place_marker(board: list, marker: str, position: int) -> None:
     if space_check(board, position):
 
         board[position] = marker
         display_board(board)
 
 
-def full_board_check(board):
+def full_board_check(board: list) -> bool:
 
     return all([True if x in ['X', 'O'] else False for x in board])
 
 
-def win_check(board, symbol):
+def win_check(board: list, symbol: str) -> bool:
 
     all_directions = {
         'right_down_diagonal': False,
@@ -109,7 +109,7 @@ def win_check(board, symbol):
         return True
 
 
-def replay():
+def replay() -> str:
     correct_input = False
     player_input = ''
 
@@ -122,75 +122,76 @@ def replay():
     return player_input
 
 
-def renew_board(board):
+def renew_board(board: list) -> list:
     return [str(x) for x in range(1, 10)]
 
 
+def game() -> None:
+    board = [str(x) for x in range(1, 10)]
+    players_inputs = []
 
-board = [str(x) for x in range(1, 10)]
-players_inputs = []
+    player_one = player_input()
+    player_two = ''
 
-player_one = player_input()
-player_two = ''
-
-if player_one == 'X':
-    player_two = 'O'
-else:
-    player_two = 'X'
-
-player_first = choose_first()
-if player_first == 1:
-    player_first = player_one
-else:
-    player_first = player_two
-
-collection = [player_one, player_two]
-(collection.remove(player_first))
-player_second = collection[0]
-
-is_full = full_board_check(board)
-is_won = False
-replay_game = True
-
-counter = 0
-winner = ''
-
-
-while replay_game:
-
-    if full_board_check(board):
-        print('Game over. Nobody winds.')
-
-        replay_game = replay()
-        if replay_game:
-            replay_game = True
-            board = renew_board(board)
-        else:
-            break
-
-
-
-    position = player_choice(board)
-
-    if counter % 2 == 0:
-        place_marker(board, player_first, position)
-        is_won = win_check(board, player_first)
-        winner = player_first
+    if player_one == 'X':
+        player_two = 'O'
     else:
-        place_marker(board, player_second, position)
-        is_won = win_check(board, player_second)
-        winner = player_second
+        player_two = 'X'
 
-    if is_won:
-        print(f'Congratulations. Player "{winner}" won the game.')
-        replay_response = replay()
+    player_first = choose_first()
+    if player_first == 1:
+        player_first = player_one
+    else:
+        player_first = player_two
 
-        if replay_response == 'N':
-            replay_game = False
+    collection = [player_one, player_two]
+    (collection.remove(player_first))
+    player_second = collection[0]
+
+    is_full = full_board_check(board)
+    is_won = False
+    replay_game = True
+
+    counter = 0
+    winner = ''
+
+    while replay_game:
+
+        if full_board_check(board):
+            print('Game over. Nobody winds.')
+
+            replay_game = replay()
+            if replay_game:
+                replay_game = True
+                board = renew_board(board)
+            else:
+                break
+
+        position = player_choice(board)
+
+        if counter % 2 == 0:
+            place_marker(board, player_first, position)
+            is_won = win_check(board, player_first)
+            winner = player_first
         else:
-            board = renew_board(board)
+            place_marker(board, player_second, position)
+            is_won = win_check(board, player_second)
+            winner = player_second
 
-    counter += 1
+        if is_won:
+            print(f'Congratulations. Player "{winner}" won the game.')
+            replay_response = replay()
+
+            if replay_response == 'N':
+                replay_game = False
+            else:
+                board = renew_board(board)
+
+        counter += 1
+
+
+if __name__ == '__main__':
+    game()
 
 
 

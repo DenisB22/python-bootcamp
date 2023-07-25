@@ -1,4 +1,4 @@
-from unittest import TestCase, main
+from unittest import TestCase
 
 from webpage_script_parser.webpage_script_parser import web_scraper
 
