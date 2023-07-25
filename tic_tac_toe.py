@@ -46,6 +46,7 @@ def player_choice(board):
                 is_position_valid = True
             else:
                 print('Position not in range (1 - 9). Please try again.')
+                continue
 
             if space_check(board, position):
                 is_free = True
