@@ -6,6 +6,7 @@ import time
 from tabulate import tabulate
 
 
+# Function for handling multiple HTTP calls at the same time
 def multithreading(data: dict, urls, usernames=None) -> dict:
     with concurrent.futures.ThreadPoolExecutor() as executor:
 
@@ -37,6 +38,7 @@ def multithreading(data: dict, urls, usernames=None) -> dict:
         return data
 
 
+# Function for visualizing and creating table with data
 def create_table(data: dict) -> None:
     minimum_time = min([x for x in data.values()])
     maximum_time = max([x for x in data.values()])
@@ -48,6 +50,7 @@ def create_table(data: dict) -> None:
     print(tabulate(data_tab, headers=col_names))
 
 
+# Function for making POST request, login with user data and measuring time for those requests
 def login(url: str, user_info: dict) -> tuple:
 
     tm1 = time.perf_counter()
@@ -65,6 +68,7 @@ def login(url: str, user_info: dict) -> tuple:
     return (result, email, total_time)
 
 
+# Function for making GET requests and measuring time for those requests
 def get_status(url: str) -> tuple:
 
     tm1 = time.perf_counter()
@@ -79,6 +83,7 @@ def get_status(url: str) -> tuple:
     return (resp.status_code, url, total_time)
 
 
+# Function for organizing and testing HTTP Get
 def http_tester() -> dict:
     print("---------------------------------HTTP Get Tester---------------------------------")
 
@@ -94,6 +99,7 @@ def http_tester() -> dict:
     return data
 
 
+# Function for organizing and testing HTTP Post / Login
 def http_tester_login() -> dict:
     print("---------------------------------HTTP Login Tester---------------------------------")
 
