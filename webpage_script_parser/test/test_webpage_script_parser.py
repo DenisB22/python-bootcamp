@@ -13,3 +13,5 @@ class WebPageScraperTests(TestCase):
         url = 'https://www.nytimes.com/'
         result = web_scraper(url)
         self.assertTrue(len(result) > 0)
+
+    # TODO: Test the response
