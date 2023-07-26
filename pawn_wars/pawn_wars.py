@@ -1,6 +1,7 @@
 import json
 
 
+# Function which exports information about the winner to JSON file
 def export_to_json(winner: str, winning_cell: str) -> dict:
     winner_dict = {
         "Winner": winner,
@@ -17,6 +18,7 @@ def export_to_json(winner: str, winning_cell: str) -> dict:
     return winner_dict
 
 
+# Function to check if white pawn is on the last cell
 def check_if_white_win(row: int, col: int, size: int) -> bool:
     if 0 <= row < size and 0 <= col < size:
         if row - 1 == 0:
@@ -24,6 +26,7 @@ def check_if_white_win(row: int, col: int, size: int) -> bool:
     return False
 
 
+# Function to check if the white pawn captures the black pawn
 def white_wins_with_capture(row: int, col: int, matrix: list, size: int) -> bool:
     if 0 <= row - 1 < size and 0 <= col - 1 < size:
         if matrix[row - 1][col - 1] == "b":
@@ -34,6 +37,7 @@ def white_wins_with_capture(row: int, col: int, matrix: list, size: int) -> bool
     return False
 
 
+# Function to check if white pawn is on the last cell
 def check_if_black_win(row: int, col: int, size: int) -> bool:
     if 0 <= row < size and 0 <= col < size:
         if row + 1 == size - 1:
@@ -41,6 +45,7 @@ def check_if_black_win(row: int, col: int, size: int) -> bool:
     return False
 
 
+# Function to check if the black pawn captures the white pawn
 def black_wins_with_capture(row: int, col: int, matrix: list, size: int) -> bool:
     if 0 <= row + 1 < size and 0 <= col - 1 < size:
         if matrix[row + 1][col - 1] == "w":
@@ -51,6 +56,7 @@ def black_wins_with_capture(row: int, col: int, matrix: list, size: int) -> bool
     return False
 
 
+# Function to check where the white pawn is located
 def get_white_coordinates(row: int, col: int, matrix: list, size: int) -> list:
     if 0 <= row - 1 < size and 0 <= col - 1 < size:
         if matrix[row - 1][col - 1] == "b":
@@ -62,6 +68,7 @@ def get_white_coordinates(row: int, col: int, matrix: list, size: int) -> list:
         return [row - 1, col]
 
 
+# Function to check where the black pawn is located
 def get_black_coordinates(row: int, col: int, matrix: list, size: int) -> list:
     if 0 <= row + 1 < size and 0 <= col - 1 < size:
         if matrix[row + 1][col - 1] == "w":
@@ -73,6 +80,7 @@ def get_black_coordinates(row: int, col: int, matrix: list, size: int) -> list:
         return [row + 1, col]
 
 
+# White pawn game main functionality
 def gameplay_white(white_current_row: int, white_current_col: int, matrix: list, size: int) -> tuple:
     coords = get_white_coordinates(white_current_row, white_current_col, matrix, size)
     coords_row, coords_col = coords[0], coords[1]
@@ -84,6 +92,7 @@ def gameplay_white(white_current_row: int, white_current_col: int, matrix: list,
     return (winner, coords, coords_row, coords_col, white_current_row, white_current_col)
 
 
+# Black pawn game main functionality
 def gameplay_black(black_current_row: int, black_current_col: int, matrix: list, size: int) -> tuple:
     coords = get_black_coordinates(black_current_row, black_current_col, matrix, size)
     coords_row, coords_col = coords[0], coords[1]
@@ -95,6 +104,7 @@ def gameplay_black(black_current_row: int, black_current_col: int, matrix: list,
     return (winner, coords, coords_row, coords_col, black_current_row, black_current_col)
 
 
+# Controller to play the game
 def play() -> None:
     size = 8
     matrix = []
@@ -107,9 +117,11 @@ def play() -> None:
     for _ in range(size):
         matrix.append(input().split())
 
+    # Set initial coordinates
     white_current_row, white_current_col = 0, 0
     black_current_row, black_current_col = 0, 0
 
+    # Search where the pawns are located in the User Input
     for row in range(size):
         for col in range(size):
             if matrix[row][col] == "w":
@@ -120,7 +132,9 @@ def play() -> None:
                 break
     counter = 0
 
+    # While a player gets to the edge of the board or a pawn captures the other pawn
     while game_on:
+        # Starting with white pawn
         if counter % 2 == 0:
             # White player's turn
 
@@ -169,6 +183,7 @@ def play() -> None:
     winning_row = coords[0]
     winning_col = coords[1]
 
+    # Check if the game finished with a capture
     if with_capture:
         print(f"Game over! {winner} win, capture on {matrix[winning_row][winning_col]}.")
     elif promoted_to_queen:
