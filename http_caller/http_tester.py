@@ -12,8 +12,23 @@ def multithreading(data: dict, urls, usernames=None) -> dict:
 
         futures = []
         if not usernames:
+
             for url in urls:
                 futures.append(executor.submit(get_status, url=url))
+
+            # Check if we are making a HTTP test to the same website
+            same_url = all([x == urls[0] for x in urls])
+
+            if same_url:
+                url = urls[0]
+                data[url] = []
+
+                for future in concurrent.futures.as_completed(futures):
+                    result_url = future.result()[1]
+                    result_time = future.result()[2]
+                    data[result_url].append(result_time)
+
+                return data
 
             for future in concurrent.futures.as_completed(futures):
                 print(future.result())
@@ -42,7 +57,18 @@ def multithreading(data: dict, urls, usernames=None) -> dict:
 def create_table(data: dict) -> None:
     minimum_time = min([x for x in data.values()])
     maximum_time = max([x for x in data.values()])
-    average_time = sum([x for x in data.values()]) / len([x for x in data.values()])
+
+    if type(minimum_time) == list and type(maximum_time) == list:
+        average_time = sum([x for x in maximum_time]) / len(maximum_time)
+        minimum_time = min(minimum_time)
+        maximum_time = max(maximum_time)
+
+        print(minimum_time)
+        print(maximum_time)
+        print(average_time)
+
+    elif type(minimum_time == int):
+        average_time = sum([x for x in data.values()]) / len([x for x in data.values()])
 
     col_names = ["Minimum Time", "Maximum Time", "Average Time"]
     data_tab = [[minimum_time, maximum_time, average_time]]
@@ -85,7 +111,7 @@ def get_status(url: str) -> tuple:
 
 # Function for organizing and testing HTTP Get
 def http_tester() -> dict:
-    print("---------------------------------HTTP Get Tester---------------------------------")
+    print("---------------------------------HTTP Get Tester Multiple Websites---------------------------------")
 
     data = {}
 
@@ -116,6 +142,17 @@ def http_tester_login() -> dict:
     return data
 
 
+def http_tester_multiple_calls_one_website(url: str, count_of_calls: int):
+    print("---------------------------------HTTP Get Tester Same Website---------------------------------")
+    multiple_urls = [url] * count_of_calls
+    data = {}
+
+    data = multithreading(data, multiple_urls)
+
+    create_table(data)
+
+
 if __name__ == "__main__":
     http_tester()
-    http_tester_login()
+    # http_tester_login()
+    http_tester_multiple_calls_one_website('https://stackoverflow.com', 3)

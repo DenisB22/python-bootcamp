@@ -83,4 +83,5 @@ def generate_password() -> str:
 
 if __name__ == '__main__':
     password = generate_password()
-    print(f"The password is valid - {validate_password(password)}.")
+    print(f"The password is: {password}")
+    print(f"The password is valid - {validate_password(password)}")
