@@ -3,11 +3,17 @@ import pandas as pd
 from datetime import datetime
 import random
 
+from web_scrape.rotating_log import create_rotating_log, logger
+
 
 # Function which checks if we already have a file, this will later be needed when we want to add data to the file
 def export_only_cols_to_csv_max() -> bool:
     try:
         with open('products_max.csv', mode='r') as csvfile:
+
+            log_info = 'checking if a CSV with maximum price statistics already exists'
+            logger.info(log_info)
+
             return True
 
     except FileNotFoundError:
@@ -27,7 +33,10 @@ def export_only_rows_to_csv_max(product: dict) -> None:
     today_rand_num = today + str(rand_num)
 
     df = pd.DataFrame(my_dict)
-    df['id'] = (df[['name']].sum(axis=1) + today_rand_num).map(hash)
+    df['id'] = abs((df[['name']].sum(axis=1) + today_rand_num).map(hash))
+
+    log_info = 'export only products with maximum price to CSV file'
+    logger.info(log_info)
 
     df.to_csv('products_max.csv', mode='a', index=False, header=False)
 
@@ -45,9 +54,12 @@ def export_rows_and_cols_to_csv_max(product: dict) -> None:
     today_rand_num = today + str(rand_num)
 
     df = pd.DataFrame(my_dict)
-    df['id'] = (df[['name']].sum(axis=1) + today_rand_num).map(hash)
+    df['id'] = abs((df[['name']].sum(axis=1) + today_rand_num).map(hash))
 
     fields = ['id', 'name', 'price', 'image']
+
+    log_info = 'export column names and products with maximum price to CSV file'
+    logger.info(log_info)
 
     df.to_csv("products_max.csv", index=False, columns=fields)
         

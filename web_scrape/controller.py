@@ -1,6 +1,7 @@
 from web_scrape.export_max_to_csv import export_only_cols_to_csv_max, export_only_rows_to_csv_max, \
     export_rows_and_cols_to_csv_max
 from web_scrape.export_min_to_csv import export_only_rows_to_csv_min, export_rows_and_cols_to_csv_min
+from web_scrape.rotating_log import create_rotating_log, logger
 from web_scrape.web_scraper import web_scrape
 
 
@@ -21,6 +22,9 @@ def module_communicator(product_max: dict, product_min: dict) -> None:
 # Controller which handles the creation of the first and second website
 def controller() -> None:
 
+    log_info = 'first website parameters attached, scraping is next'
+    logger.info(log_info)
+
     # First Website
     first_website = web_scrape("https://bianchi.bg/kafe-na-zarna", ".product-thumb.product-wrapper .product-details",
                                ".product-thumb.product-wrapper .product-details .price",
@@ -32,6 +36,9 @@ def controller() -> None:
     product_min = first_website[1]
 
     module_communicator(product_max, product_min)
+
+    log_info = 'second website parameters attached, scraping is next'
+    logger.info(log_info)
 
     # Second Website
     second_website = web_scrape(
