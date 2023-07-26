@@ -5,33 +5,40 @@ import bs4
 
 
 # Function which get scrapes the New York Times website and creates a collection of all articles
-def web_scraper(url: str) -> tuple:
+def web_scraper(url: str) -> list:
     result = requests.get(url)
 
     soup = bs4.BeautifulSoup(result.text, 'lxml')
 
-    # This should work!!!
-    # article_headers = soup.select('.css-plkyuz')
+    story_wrapper = soup.select('.story-wrapper')
+    articles_collection = []
 
-    article_headers = soup.select('.css-9mylee h3')
-    article_dict = {}
+    for story in story_wrapper:
+        article_dict = {}
 
-    counter = 0
-    for article in article_headers:
-        text = article.getText()
+        title_list = story.select('h3')
+        content_list = story.select('.summary-class')
 
-        if text:
-            article_dict[counter] = text
-            counter += 1
+        title = ''
+        if title_list:
+            title = title_list[0].getText()
 
-    # Create JSON object
-    json_object = json.dumps(article_dict, indent=4)
+        content = ''
+        if content_list:
+            content = content_list[0].getText()
+
+        article_dict[title] = content
+
+        if title:
+            articles_collection.append(article_dict)
+
+    json_object = json.dumps(articles_collection, indent=4)
 
     # Export to JSON file
     with open('articles.json', 'w') as outfile:
         outfile.write(json_object)
 
-    return (article_dict, result)
+    return articles_collection
 
 
 if __name__ == "__main__":

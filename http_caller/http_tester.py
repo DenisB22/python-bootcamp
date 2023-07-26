@@ -142,7 +142,7 @@ def http_tester_login() -> dict:
     return data
 
 
-def http_tester_multiple_calls_one_website(url: str, count_of_calls: int):
+def http_tester_multiple_calls_one_website(url: str, count_of_calls: int) -> None:
     print("---------------------------------HTTP Get Tester Same Website---------------------------------")
     multiple_urls = [url] * count_of_calls
     data = {}
@@ -154,7 +154,7 @@ def http_tester_multiple_calls_one_website(url: str, count_of_calls: int):
 
 if __name__ == "__main__":
     http_tester()
-    
+
     # Should only be executed when local server is running
     # http_tester_login()
 
