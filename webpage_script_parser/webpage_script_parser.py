@@ -5,7 +5,7 @@ import bs4
 
 
 # Function which get scrapes the New York Times website and creates a collection of all articles
-def web_scraper(url: str) -> dict:
+def web_scraper(url: str) -> tuple:
     result = requests.get(url)
 
     soup = bs4.BeautifulSoup(result.text, 'lxml')
@@ -31,7 +31,7 @@ def web_scraper(url: str) -> dict:
     with open('articles.json', 'w') as outfile:
         outfile.write(json_object)
 
-    return article_dict
+    return (article_dict, result)
 
 
 if __name__ == "__main__":
