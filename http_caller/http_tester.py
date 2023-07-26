@@ -154,5 +154,9 @@ def http_tester_multiple_calls_one_website(url: str, count_of_calls: int):
 
 if __name__ == "__main__":
     http_tester()
+    
+    # Should only be executed when local server is running
     # http_tester_login()
-    http_tester_multiple_calls_one_website('https://stackoverflow.com', 3)
+
+    count_of_calls = 3
+    http_tester_multiple_calls_one_website('https://stackoverflow.com', count_of_calls)
