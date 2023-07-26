@@ -14,7 +14,7 @@ def web_scraper(url: str) -> list:
     articles_collection = []
 
     for story in story_wrapper:
-        article_dict = {}
+        article_dict = {"title": "", "content": ""}
 
         title_list = story.select('h3')
         content_list = story.select('.summary-class')
@@ -27,7 +27,8 @@ def web_scraper(url: str) -> list:
         if content_list:
             content = content_list[0].getText()
 
-        article_dict[title] = content
+        article_dict["title"] = title
+        article_dict["content"] = content
 
         if title:
             articles_collection.append(article_dict)
