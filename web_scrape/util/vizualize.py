@@ -1,7 +1,7 @@
 from skimage import io
 import matplotlib.pyplot as plt
 
-from web_scrape.rotating_log import create_rotating_log, logger
+from web_scrape.logs.rotating_log import logger
 
 
 # Function for visualizing the product image

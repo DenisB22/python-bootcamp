@@ -3,7 +3,7 @@ from schedule import every, repeat
 import time as tm
 
 from web_scrape.controller import controller
-from web_scrape.rotating_log import create_rotating_log, logger
+from web_scrape.logs.rotating_log import logger
 
 
 # Setting the CRON time period

@@ -1,7 +1,9 @@
-from web_scrape.export_max_to_csv import export_only_cols_to_csv_max, export_only_rows_to_csv_max, \
+from web_scrape.products_csv.export_max_to_csv import export_only_cols_to_csv_max, export_only_rows_to_csv_max, \
     export_rows_and_cols_to_csv_max
-from web_scrape.export_min_to_csv import export_only_rows_to_csv_min, export_rows_and_cols_to_csv_min
-from web_scrape.rotating_log import create_rotating_log, logger
+from web_scrape.products_json.export_max_to_json import export_max_to_json
+from web_scrape.products_csv.export_min_to_csv import export_only_rows_to_csv_min, export_rows_and_cols_to_csv_min
+from web_scrape.products_json.export_min_to_json import export_min_to_json
+from web_scrape.logs.rotating_log import logger
 from web_scrape.web_scraper import web_scrape
 
 
@@ -17,6 +19,9 @@ def module_communicator(product_max: dict, product_min: dict) -> None:
         # Call the functions which handle adding both the column headers and the information of the first product
         export_rows_and_cols_to_csv_max(product_max)
         export_rows_and_cols_to_csv_min(product_min)
+
+    export_min_to_json(product_min)
+    export_max_to_json(product_max)
 
 
 # Controller which handles the creation of the first and second website

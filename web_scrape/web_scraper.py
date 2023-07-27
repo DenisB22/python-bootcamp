@@ -4,8 +4,7 @@ import sys
 import re
 
 from Product import Product
-from web_scrape.rotating_log import create_rotating_log
-from web_scrape.vizualize import show_image
+from web_scrape.util.vizualize import show_image
 
 
 # Web scraping the given image and returning the products with maximum and minimum prices
@@ -63,5 +62,7 @@ def web_scrape(url: str, products_class: str, product_prices_class: str, product
     show_image(product_min_price[list(product_min_price.keys())[0]][1])
 
     return (product_max_price, product_min_price)
+
+
 
 
