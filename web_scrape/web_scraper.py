@@ -4,7 +4,7 @@ import sys
 import re
 
 from Product import Product
-from web_scrape.util.vizualize import show_image
+from web_scrape.utils.vizualize import show_image
 
 
 # Web scraping the given image and returning the products with maximum and minimum prices
