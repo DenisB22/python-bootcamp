@@ -17,7 +17,11 @@
 ## Program structure
 
 1. The program includes log files, containing information about every step from the execution of the program
-2. The program includes modules that are responsible for exporting data (image, minimum and maximum price of the products for the given page) to CSV and JSON files
+2. The program includes methods that are responsible for exporting data (image, minimum and maximum price of the products for the given page) to CSV and JSON files
 3. The program includes "utils" folder, which contains the cron module and the module for visualizing the products on the user's screen
-4. The controller.py module delegates the data to the web_scraper which does the collecting and storing the data for products
-5. The web_scraper.py module collects and stores data for the products and finds the products with minimum and maximum prices
+4. The controller.py module delegates the data to the WebScraper Object
+5. The WebScraper Object 
+   1. Collects and stores data for the products and finds the products with minimum and maximum prices
+   2. Exports the products with maximum and minimum price to JSON files
+   3. Exports the products with maximum and minimum price to CSV file
+   4. Contains a method which is responsible for communicating with other methods
