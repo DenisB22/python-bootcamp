@@ -68,10 +68,10 @@ class WebScraper:
         price_max = product_max_price[list(product_max_price.keys())[0]][0]
         image_max = product_max_price[list(product_max_price.keys())[0]][1]
 
-        print(
-            f"The Coffee Beans with the maximum price in the following Web Page is: "
-            f"{name_max} with Price: "
-            f"{price_max}")
+        log_info = f"The Coffee Beans with the maximum price in " \
+                   f"the following Web Page is: {name_max} with Price: {price_max}"
+
+        logger.info(log_info)
 
         product_max = Product(name_max, price_max, image_max)
         image = product_max.image
@@ -82,11 +82,10 @@ class WebScraper:
         price_min = product_min_price[list(product_min_price.keys())[0]][0]
         image_min = product_min_price[list(product_min_price.keys())[0]][1]
 
-        # print(product_min_price)
-        print(
-            f"The Coffee Beans with the minimum price in the following Web Page is: "
-            f"{name_min} with Price: "
-            f"{price_min}")
+        log_info = f"The Coffee Beans with the minimum price in " \
+                   f"the following Web Page is: {name_min} with Price: {price_min}"
+
+        logger.info(log_info)
 
         product_min = Product(name_min,
                               price_min,
@@ -169,7 +168,6 @@ class WebScraper:
         df.to_csv(path, index=False, columns=fields)
 
     def method_communicator(self, product_max: dict, product_min: dict) -> None:
-
         file_min_exists = self.export_only_cols_to_csv('./products_csv/products_min.csv',
                                                        'checking if a CSV with minimum price statistics already exists')
 

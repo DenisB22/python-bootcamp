@@ -12,7 +12,8 @@ class Product:
         self.price = price
         self.image = image
 
-    def show_image(self, url: str) -> None:
+    @staticmethod
+    def show_image(url: str) -> None:
         log_info = 'visualize product images on desktop'
         logger.info(log_info)
 
