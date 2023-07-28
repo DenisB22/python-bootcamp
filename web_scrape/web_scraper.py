@@ -4,6 +4,7 @@ import sys
 import re
 
 from Product import Product
+from web_scrape.logs.rotating_log import logger
 from web_scrape.utils.vizualize import show_image
 
 
@@ -29,8 +30,7 @@ def web_scrape(url: str, products_class: str, product_prices_class: str, product
     counter = 0
 
     log_info = 'web scraping starting, collecting products from web page'
-    # logger = create_rotating_log('test.log')
-    # logger.info(log_info)
+    logger.info(log_info)
 
     # Collect all products from the page
     for product in products:

@@ -1,9 +1,2 @@
-2023-07-27 11:15:52,106 - Rotating Log - INFO - second website parameters attached, scraping is next
-2023-07-27 11:15:52,558 - Rotating Log - INFO - visualize product images on desktop
-2023-07-27 11:15:53,693 - Rotating Log - INFO - visualize product images on desktop
-2023-07-27 11:15:55,170 - Rotating Log - INFO - checking if a CSV with maximum price statistics already exists
-2023-07-27 11:15:55,176 - Rotating Log - INFO - export only products with maximum price to CSV file
-2023-07-27 11:15:55,185 - Rotating Log - INFO - export only products with minimum price to CSV file
-2023-07-27 11:15:55,188 - Rotating Log - INFO - exporting product with max price to JSON file
-2023-07-27 11:15:55,189 - Rotating Log - INFO - exporting product with max price to JSON file
-2023-07-27 11:15:55,190 - Rotating Log - INFO - exporting product with max price to JSON file
+2023-07-27 11:26:19,112 - Rotating Log - INFO - exporting product with max price to JSON file
+2023-07-27 11:26:19,115 - Rotating Log - INFO - exporting product with max price to JSON file
