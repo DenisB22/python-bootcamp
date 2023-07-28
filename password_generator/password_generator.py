@@ -19,30 +19,25 @@ def validate_password(rand_pass: str) -> bool:
     at_least_numbers = 3
     at_least_capitals = 1
 
-    is_length_valid = False
-    is_allowed_symbols_valid = False
-    is_at_least_numbers_valid = False
-    is_at_least_capitals_valid = False
+    is_valid = False
 
     if min_length <= len(rand_pass) <= max_length:
-        is_length_valid = True
+        is_valid = True
 
     symbols_found_in_allowed_symbols = [x for x in rand_pass if x in allowed_symbols]
     if len(symbols_found_in_allowed_symbols) >= at_least_allowed_symbols:
-        is_allowed_symbols_valid = True
+        is_valid = True
 
-    numbers_count = len([x for x in rand_pass if x in ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']])
+    numbers_count = len([x for x in rand_pass if x in [str(y) for y in range(0, 10)]])
+
     if numbers_count >= at_least_numbers:
-        is_at_least_numbers_valid = True
+        is_valid = True
 
     capitals_count = len([x for x in rand_pass if x.isupper()])
     if capitals_count >= at_least_capitals:
-        is_at_least_capitals_valid = True
+        is_valid = True
 
-    if is_length_valid and is_allowed_symbols_valid and is_at_least_numbers_valid and is_at_least_capitals_valid:
-        return True
-    else:
-        return False
+    return is_valid
 
 
 def generate_password() -> str:

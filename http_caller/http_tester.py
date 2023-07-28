@@ -5,6 +5,8 @@ import concurrent.futures
 import time
 from tabulate import tabulate
 
+import os
+
 
 # Function for handling multiple HTTP calls at the same time
 def multithreading(data: dict, urls, usernames=None) -> dict:
@@ -132,9 +134,9 @@ def http_tester_login() -> dict:
     data = {}
 
     usernames = [
-        {'email': 'peter@abv.bg', 'password': '123456'},
-        {'email': 'george@abv.bg', 'password': '123456'},
-        {'email': 'admin@abv.bg', 'password': 'admin'}
+        {'email': os.getenv('EMAIL_FIRST'), 'password': os.environ.get('PASSWORD_FIRST')},
+        {'email': os.environ.get('EMAIL_SECOND'), 'password': os.environ.get('PASSWORD_SECOND')},
+        {'email': os.environ.get('EMAIL_THIRD'), 'password': os.environ.get('PASSWORD_THIRD')}
     ]
 
     data = multithreading(data, 'http://localhost:3030/users/login', usernames)
@@ -156,7 +158,7 @@ if __name__ == "__main__":
     http_tester()
 
     # Should only be executed when local server is running
-    # http_tester_login()
+    http_tester_login()
 
     count_of_calls = 3
     http_tester_multiple_calls_one_website('https://stackoverflow.com', count_of_calls)
