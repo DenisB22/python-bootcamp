@@ -2,13 +2,13 @@ CREATE TABLE category(
     id SERIAL PRIMARY KEY,
     label VARCHAR(100),
     description TEXT
-)
+);
 
 INSERT INTO category(label, description)
 VALUES
     ('Weekly chores', 'The chores that must be completed within a week.'),
     ('Daily chores', 'The chores that must be completed within a day.'),
-    ('Monthly chores', 'The chores that must be completed within a month.')
+    ('Monthly chores', 'The chores that must be completed within a month.');
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
@@ -22,7 +22,7 @@ INSERT INTO users(username, email)
 VALUES
     ('DenisB22', 'denis@gmail.com'),
     ('George44', 'george@yahoo.com'),
-    ('IvanB48', 'ivan@yahoo.com')
+    ('IvanB48', 'ivan@yahoo.com');
 
 CREATE TABLE todo_list(
     id SERIAL PRIMARY KEY,
@@ -36,7 +36,7 @@ INSERT INTO todo_list(title, summary, category_id, user_id)
 VALUES
     ('To Do Daily'),
     ('To Do Weekly'),
-    ('To Do Monthly')
+    ('To Do Monthly');
 
 CREATE TABLE entry(
 	id SERIAL PRIMARY KEY,
@@ -56,7 +56,7 @@ VALUES
     ('Clean the house', TRUE, 1, 1, 2),
     ('Wash the dishes', FALSE, 2, 2, 1),
     ('Sweeping and mopping the floor', TRUE, 1, 1, 2),
-    ('Order the garage', FALSE, 3, 3, 3)
+    ('Order the garage', FALSE, 3, 3, 3);
 
 --
 
