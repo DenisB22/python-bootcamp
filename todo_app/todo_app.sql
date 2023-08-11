@@ -29,14 +29,15 @@ CREATE TABLE todo_list(
     title VARCHAR(100),
     summary TEXT,
     category_id INT REFERENCES category(id) ON DELETE CASCADE,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE
+    user_id_created INT REFERENCES users(id) ON DELETE CASCADE,
+	user_id_updated INT REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO todo_list(title, summary, category_id, user_id)
+INSERT INTO todo_list(title, summary, category_id, user_id_created, user_id_updated)
 VALUES
-    ('To Do Daily', 'To Do list for the daily tasks.', 2, 1),
-    ('To Do Weekly', 'To Do list for the weekly tasks.', 1, 2),
-    ('To Do Monthly', 'To Do list for the monthly tasks.', 3, 1);
+    ('To Do Daily', 'To Do list for the daily tasks.', 2, 1, 2),
+    ('To Do Weekly', 'To Do list for the weekly tasks.', 1, 2, 1),
+    ('To Do Monthly', 'To Do list for the monthly tasks.', 3, 1, 3);
 
 CREATE TABLE entry(
 	id SERIAL PRIMARY KEY,
@@ -115,21 +116,9 @@ SELECT title, e.description, summary, label, is_complete, e.created_at, e.update
 FROM todo_list tl
 JOIN entry e ON tl.id = e.todo_list_id
 JOIN category c  ON tl.category_id = c.id
-JOIN users uc ON uc.id = (
-	SELECT user_id
-	FROM todo_list
-	JOIN entry ON entry.created_by_user_id = todo_list.user_id
-	WHERE todo_list.id = 1
-	GROUP BY user_id
-)
-JOIN users uu ON uu.id = (
-	SELECT user_id
-	FROM todo_list
-	JOIN entry ON entry.updated_by_user_id = todo_list.user_id
-	WHERE todo_list.id = 1
-	GROUP BY user_id
-)
-WHERE tl.id = 1;
+JOIN users AS uc ON uc.id = tl.user_id_created
+JOIN users AS uu ON uu.id = tl.user_id_updated;
+
 
 -- show the entries in a single todo list with the following information
 
