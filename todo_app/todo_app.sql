@@ -177,11 +177,11 @@ WHERE todo_list.id = 1;
 SELECT username
 FROM users
 WHERE users.id = (
-	SELECT user_id
+	SELECT user_id_created
 	FROM todo_list
-	JOIN entry ON entry.created_by_user_id = todo_list.user_id
+	JOIN entry ON entry.created_by_user_id = todo_list.user_id_created
 	WHERE todo_list.id = 1
-	GROUP BY user_id
+	GROUP BY user_id_created
 );
 
 -- user.email (the creator)
@@ -189,11 +189,11 @@ WHERE users.id = (
 SELECT email
 FROM users
 WHERE users.id = (
-	SELECT user_id
+	SELECT user_id_created
 	FROM todo_list
-	JOIN entry ON entry.created_by_user_id = todo_list.user_id
+	JOIN entry ON entry.created_by_user_id = todo_list.user_id_created
 	WHERE todo_list.id = 1
-	GROUP BY user_id
+	GROUP BY user_id_created
 );
 
 -- user.username (the one who has last updated it)
@@ -201,11 +201,11 @@ WHERE users.id = (
 SELECT username
 FROM users
 WHERE users.id = (
-	SELECT user_id
+	SELECT user_id_updated
 	FROM todo_list
-	JOIN entry ON entry.updated_by_user_id = todo_list.user_id
+	JOIN entry ON entry.updated_by_user_id = todo_list.user_id_updated
 	WHERE todo_list.id = 1
-	GROUP BY user_id
+	GROUP BY user_id_updated
 );
 
 -- user.email (the one who has last updated it)
@@ -213,11 +213,11 @@ WHERE users.id = (
 SELECT email
 FROM users
 WHERE users.id = (
-	SELECT user_id
+	SELECT user_id_updated
 	FROM todo_list
-	JOIN entry ON entry.updated_by_user_id = todo_list.user_id
+	JOIN entry ON entry.updated_by_user_id = todo_list.user_id_updated
 	WHERE todo_list.id = 1
-	GROUP BY user_id
+	GROUP BY user_id_updated
 );
 
 
