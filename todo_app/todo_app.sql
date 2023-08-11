@@ -111,7 +111,7 @@ WHERE is_complete = 'true';
     --user.username (the one who has last updated it)
     --user.email (the one who has last updated it)
 
-SELECT title, summary, label, is_complete, e.created_at, e.updated_at, uc.username AS username_created, uc.email AS email_created, uu.username AS username_updated, uu.email AS email_updated
+SELECT title, e.description, summary, label, is_complete, e.created_at, e.updated_at, uc.username AS username_created, uc.email AS email_created, uu.username AS username_updated, uu.email AS email_updated
 FROM todo_list tl
 JOIN entry e ON tl.id = e.todo_list_id
 JOIN category c  ON tl.category_id = c.id
