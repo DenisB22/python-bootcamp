@@ -14,8 +14,8 @@ CREATE TABLE users(
     id SERIAL PRIMARY KEY,
     username VARCHAR(100),
     email VARCHAR(100),
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-    todo_list_id INT REFERENCES todo_list(id) ON DELETE CASCADE
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+    -- todo_list_id INT REFERENCES todo_list(id) ON DELETE CASCADE
 );
 
 INSERT INTO users(username, email)
@@ -34,9 +34,9 @@ CREATE TABLE todo_list(
 
 INSERT INTO todo_list(title, summary, category_id, user_id)
 VALUES
-    ('To Do Daily'),
-    ('To Do Weekly'),
-    ('To Do Monthly');
+    ('To Do Daily', 'To Do list for the daily tasks.', 2, 1),
+    ('To Do Weekly', 'To Do list for the weekly tasks.', 1, 2),
+    ('To Do Monthly', 'To Do list for the monthly tasks.', 3, 1);
 
 CREATE TABLE entry(
 	id SERIAL PRIMARY KEY,
