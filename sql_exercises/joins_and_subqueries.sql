@@ -48,11 +48,53 @@ ORDER BY member, facility;
 -- Include in your output the name of the facility, the name of the member formatted as a single column, and the cost.
 -- Order by descending cost, and do not use any subqueries.
 
--- TODO: continue the example
-SELECT
+SELECT firstname || ' ' || surname AS member, name AS facility,
 	CASE
-		WHEN memid > 0 THEN membercost * slots
-		WHEN memid = 0 THEN guestcost * slots
+		WHEN cd.bookings.memid > 0 THEN membercost * slots
+		WHEN cd.bookings.memid = 0 THEN guestcost * slots
 	END AS cost
-FROM cd.facilities
-JOIN cd.bookings ON cd.facilities.facid = cd.bookings.facid;
+FROM cd.members
+JOIN cd.bookings ON cd.bookings.memid = cd.members.memid
+JOIN cd.facilities ON cd.facilities.facid = cd.bookings.facid
+WHERE cd.bookings.starttime >= '2012-09-14' AND
+cd.bookings.starttime < '2012-09-15' AND
+(
+	(cd.members.memid = 0 AND cd.bookings.slots * cd.facilities.guestcost > 30)
+  	OR
+  	(cd.members.memid != 0 AND cd.bookings.slots * cd.facilities.membercost > 30)
+
+)
+ORDER BY cost DESC;
+
+-- How can you output a list of all members, including the individual who recommended them (if any), without using any joins?
+-- Ensure that there are no duplicates in the list, and that each firstname + surname pairing is formatted as a column and ordered.
+
+SELECT DISTINCT mem.firstname || ' ' || mem.surname AS member,
+(
+	SELECT DISTINCT rec.firstname || ' ' || rec.surname AS recommender
+  	FROM cd.members rec
+  	WHERE rec.memid = mem.recommendedby
+)
+FROM cd.members mem
+ORDER BY member;
+
+-- The Produce a list of costly bookings exercise contained some messy logic: we had to calculate the booking cost in both the WHERE clause and the CASE statement.
+-- Try to simplify this calculation using subqueries
+
+SELECT member, facility, cost FROM
+(SELECT firstname || ' ' || surname AS member, name AS facility,
+	CASE
+		WHEN cd.bookings.memid > 0 THEN membercost * slots
+		WHEN cd.bookings.memid = 0 THEN guestcost * slots
+	END AS cost
+FROM cd.members
+JOIN cd.bookings ON cd.bookings.memid = cd.members.memid
+JOIN cd.facilities ON cd.facilities.facid = cd.bookings.facid
+WHERE cd.bookings.starttime >= '2012-09-14' AND
+cd.bookings.starttime < '2012-09-15') AS bookings
+WHERE cost > 30
+ORDER BY cost DESC;
+
+
+
+
