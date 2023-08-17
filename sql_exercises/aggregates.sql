@@ -188,13 +188,126 @@ FROM (
 ) AS ranked
 WHERE ranked = 1;
 
--- TODO: continue with the examples
+-- Produce a list of members (including guests), along with the number of hours they've booked in facilities, rounded to the nearest ten hours.
+-- Rank them by this rounded figure, producing output of first name, surname, rounded hours, rank. Sort by rank, surname, and first name.
 
+SELECT firstname, surname, ROUND((SUM(bks.slots) * 0.5)::numeric, -1) hours,
+RANK() OVER (
+	ORDER BY  ROUND((SUM(bks.slots) * 0.5)::numeric, -1) DESC
+) rank
+FROM cd.bookings bks
+JOIN cd.members mem ON bks.memid = mem.memid
+GROUP BY mem.firstname, mem.surname
+ORDER BY rank, surname, firstname;
 
+-- Produce a list of the top three revenue generating facilities (including ties).
+-- Output facility name and rank, sorted by rank and facility name.
 
+SELECT name, RANK() OVER (
+	ORDER BY SUM(slots *
+		CASE
+			WHEN memid = 0 THEN guestcost
+		ELSE membercost
+	END) DESC
+) AS rank
+FROM cd.facilities
+JOIN cd.bookings
+ON cd.facilities.facid = cd.bookings.facid
+GROUP BY name
+ORDER BY rank
+LIMIT 3;
 
+-- Classify facilities into equally sized groups of high, average, and low based on their revenue.
+-- Order by classification and facility name.
 
+SELECT name,
+CASE
+	WHEN col = 3 THEN 'low'
+	WHEN col = 2 THEN 'average'
+	WHEN col = 1 THEN 'high'
+END revenue
+FROM (
+	SELECT name,
+	NTILE(3) OVER (
+		ORDER BY SUM(slots *
+			CASE
+				WHEN memid = 0 THEN guestcost
+				ELSE membercost
+			END) DESC
+	) AS col
+	FROM cd.facilities
+	JOIN cd.bookings
+	ON cd.facilities.facid = cd.bookings.facid
+	GROUP BY name
+) AS initial
+ORDER BY col, name
 
+-- Based on the 3 complete months of data so far, calculate the amount of time each facility will take to repay its cost of ownership.
+-- Remember to take into account ongoing monthly maintenance.
+-- Output facility name and payback time in months, order by facility name.
+-- Don't worry about differences in month lengths, we're only looking for a rough value here!
+
+SELECT name, totalsum / (revenue / 3) AS months
+FROM
+(
+	SELECT name, (SUM(slots *
+	CASE
+		WHEN memid = 0 THEN guestcost
+		ELSE membercost
+	END) - (monthlymaintenance * 3)) AS revenue, (initialoutlay) TotalSum
+	FROM cd.facilities
+	JOIN cd.bookings
+	ON cd.facilities.facid = cd.bookings.facid
+	GROUP BY name, TotalSum, monthlymaintenance
+) AS abc
+ORDER BY name
+
+-- For each day in August 2012, calculate a rolling average of total revenue over the previous 15 days.
+-- Output should contain date and revenue columns, sorted by the date.
+-- Remember to account for the possibility of a day having zero revenue.
+-- This one's a bit tough, so don't be afraid to check out the hint!
+
+SELECT starttime AS date
+FROM cd.bookings
+WHERE EXTRACT(MONTH FROM starttime) = 8
+
+SELECT name, SUM(slots *
+CASE
+	WHEN memid = 0 THEN guestcost
+	ELSE membercost
+END) AS revenue
+FROM cd.facilities
+JOIN cd.bookings
+ON cd.facilities.facid = cd.bookings.facid
+GROUP BY name
+ORDER BY revenue;
+
+SELECT date, SUM(revenue)
+FROM (
+	SELECT EXTRACT(YEAR FROM starttime) || '-' ||
+  	CASE
+  		WHEN EXTRACT(MONTH FROM starttime) < 10 THEN '0' || EXTRACT(MONTH FROM starttime)
+  		ELSE EXTRACT(MONTH FROM starttime)::varchar
+  	END
+  	|| '-' ||
+  	CASE
+		WHEN EXTRACT(DAY FROM starttime) < 10 THEN '0' || EXTRACT(DAY FROM starttime)::varchar
+		ELSE EXTRACT(DAY FROM starttime)::varchar
+	END AS date, SUM(slots *
+	CASE
+		WHEN memid = 0 THEN guestcost
+		ELSE membercost
+	END) AS revenue
+	FROM cd.facilities
+	JOIN cd.bookings
+	ON cd.facilities.facid = cd.bookings.facid
+	WHERE EXTRACT(MONTH FROM starttime) = 8
+	GROUP BY starttime
+	ORDER BY EXTRACT(DAY FROM starttime)
+) AS innertable
+GROUP BY date
+
+-- TODO: Continue with the examples
 
 
 
