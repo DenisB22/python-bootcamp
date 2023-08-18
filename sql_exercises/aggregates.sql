@@ -267,47 +267,24 @@ ORDER BY name
 -- Remember to account for the possibility of a day having zero revenue.
 -- This one's a bit tough, so don't be afraid to check out the hint!
 
-SELECT starttime AS date
-FROM cd.bookings
-WHERE EXTRACT(MONTH FROM starttime) = 8
+SELECT date,
+       (
+          SELECT SUM(slots *
+            CASE
+	            WHEN memid = 0 THEN guestcost
+	            ELSE membercost
+            END) / 15 AS rev
+          FROM cd.bookings bks
+          INNER JOIN cd.facilities facs ON bks.facid = facs.facid
+          WHERE bks.starttime > dategen.date - INTERVAL '14 days'
+          AND bks.starttime < dategen.date + INTERVAL '1 day'
+       ) AS revenue
+FROM
+    (
+        SELECT CAST(generate_series(TIMESTAMP '2012-08-01', '2012-08-31', '1 day') AS DATE) AS date
+    ) AS dategen
+ORDER BY dategen.date;
 
-SELECT name, SUM(slots *
-CASE
-	WHEN memid = 0 THEN guestcost
-	ELSE membercost
-END) AS revenue
-FROM cd.facilities
-JOIN cd.bookings
-ON cd.facilities.facid = cd.bookings.facid
-GROUP BY name
-ORDER BY revenue;
-
-SELECT date, SUM(revenue)
-FROM (
-	SELECT EXTRACT(YEAR FROM starttime) || '-' ||
-  	CASE
-  		WHEN EXTRACT(MONTH FROM starttime) < 10 THEN '0' || EXTRACT(MONTH FROM starttime)
-  		ELSE EXTRACT(MONTH FROM starttime)::varchar
-  	END
-  	|| '-' ||
-  	CASE
-		WHEN EXTRACT(DAY FROM starttime) < 10 THEN '0' || EXTRACT(DAY FROM starttime)::varchar
-		ELSE EXTRACT(DAY FROM starttime)::varchar
-	END AS date, SUM(slots *
-	CASE
-		WHEN memid = 0 THEN guestcost
-		ELSE membercost
-	END) AS revenue
-	FROM cd.facilities
-	JOIN cd.bookings
-	ON cd.facilities.facid = cd.bookings.facid
-	WHERE EXTRACT(MONTH FROM starttime) = 8
-	GROUP BY starttime
-	ORDER BY EXTRACT(DAY FROM starttime)
-) AS innertable
-GROUP BY date
-
--- TODO: Continue with the examples
 
 
 
