@@ -47,3 +47,37 @@ SELECT starttime, starttime + INTERVAL '30 minutes' * slots AS endtime
 FROM cd.bookings
 ORDER BY endtime DESC, starttime DESC
 LIMIT 10;
+
+-- Return a count of bookings for each month, sorted by month
+
+SELECT
+	DATE_TRUNC('month', starttime) m,
+	COUNT(starttime)
+FROM
+	cd.bookings
+GROUP BY m
+ORDER BY m;
+
+-- Work out the utilisation percentage for each facility by month, sorted by name and month, rounded to 1 decimal place.
+-- Opening time is 8am, closing time is 8.30pm.
+-- You can treat every month as a full month, regardless of if there were some dates the club was not open.
+
+SELECT name, m AS month, ROUND(((sum / ((12.5 * days) * 2)) * 100)::numeric, 1) AS utilization
+FROM (
+	SELECT
+	name,
+	DATE_TRUNC('month', starttime) m,
+	DATE_PART('days',
+        DATE_TRUNC('month', starttime::timestamp)
+        + '1 MONTH'::INTERVAL
+        - '1 DAY'::INTERVAL
+    ) AS days,
+	SUM(slots)
+	FROM
+	cd.bookings bks
+	JOIN
+	cd.facilities fac ON bks.facid = fac.facid
+	GROUP BY name, m
+) AS outertable
+ORDER BY name;
+
